@@ -112,3 +112,7 @@ export default TeslaNotice;
 import TeslaNotice from '../components/TeslaNotice/TeslaNotice';
 <TeslaNotice />
 ```
+
+## Props-type
+
+여기서 React built-in typechecking 기능을 이용하여 propTypes를 지정하였다. 개발모드에서 React는 컴포넌트에 전달되는 props를 체크하게 된다. (성능상의 이유로 오직 개발모드에서만 가능하다) 각 props 속성에 대해 React는 (1) prop이 예상되는지 (2) prop이 올바른 유형인지 확인하기 위해 컴포넌트의 propType 객체에서 이를 찾으려고 시도한다.
