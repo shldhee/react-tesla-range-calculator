@@ -55,3 +55,60 @@ export default Header;
 ## 스타일
 
 * 컴포넌트에 스타일 주는 방법은 여러가지 있으나 여기서는 `components`디렉토리 안에 각 컴포넌트 디렉토리를 만들고 `js`,`css`파일을 쌍으로 만들것이다.
+
+
+## Container에 Component 렌더링
+
+Container : *TeslaBattery.js*
+
+``` js
+import React, { Component } from 'react';
+import './TeslaBattery.css';
+import TeslaNotice from '../components/TeslaNotice/TeslaNotice';
+
+class TeslaBattery extends Component {
+  render() {
+    return (
+      <form className="tesla-battery">
+        <h1>Range Per Charge</h1>
+        <TeslaNotice />
+      </form>
+    );
+  }
+}
+
+export default TeslaBattery;
+```
+
+Component : *TelsaNotice.js*
+* Presentational Component
+* 함수형 컴포넌트
+
+``` js
+import React from 'react';
+import './TeslaNotice.css';
+
+const TeslaNotice = () => (
+  <div className="tesla-battery__notice">
+    <p>
+      The actual amount of range that you experience will vary based on your
+      particular use conditions. See how particular use conditions may affect
+      your range in our simulation model.
+    </p>
+    <p>
+      Vehicle range may vary depending on the vehicle configuration, battery age
+      and condition, driving style and operating, environmental and climate
+      conditions.
+    </p>
+  </div>
+);
+
+export default TeslaNotice;
+```
+
+*TeslaBattery.js*에 `TeslaNotice` 컴포넌트 추가
+
+``` js
+import TeslaNotice from '../components/TeslaNotice/TeslaNotice';
+<TeslaNotice />
+```
