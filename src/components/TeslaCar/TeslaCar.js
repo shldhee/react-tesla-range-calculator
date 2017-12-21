@@ -20,7 +20,7 @@ const TeslaCar = props => (
 );
 
 TeslaCar.propTypes = {
-  wheelsize: React.PropTypes.number,
+  wheelsize: PropTypes.number,
 };
 
 export default TeslaCar;
