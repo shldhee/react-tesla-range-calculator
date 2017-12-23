@@ -20,9 +20,6 @@ class TeslaBattery extends Component {
 
   render() {
     const { config } = this.state;
-    console.log(this.state);
-    console.log(this.state.config);
-    console.log(config);
     return (
       <form className="tesla-battery">
         <h1>Range Per Charge</h1>

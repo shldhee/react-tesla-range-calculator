@@ -6,12 +6,12 @@ const TeslaCar = props => (
   <div className="tesla-car">
     <div className="tesla-wheels">
       <div
-        className={`tesla-wheel telsa-wheel--front tesla-wheel--${
+        className={`tesla-wheel tesla-wheel--front tesla-wheel--${
           props.wheelsize
         }`}
       />
       <div
-        className={`tesla-wheel telsa-wheel--rear tesla-wheel--${
+        className={`tesla-wheel tesla-wheel--rear tesla-wheel--${
           props.wheelsize
         }`}
       />

@@ -18,11 +18,9 @@
 
 ```js
 <App>
-  {' '}
   -- Application entry point
   <Header />
   <TeslaBattery>
-    {' '}
     -- Container
     <TeslaCar /> -- Presentational Component
     <TeslaStats /> -- Presentational Component
@@ -121,6 +119,15 @@ import TeslaNotice from '../components/TeslaNotice/TeslaNotice';
 
 여기서 React built-in typechecking 기능을 이용하여 propTypes 를 지정하였다. 개발모드에서 React 는 컴포넌트에 전달되는 props 를 체크하게 된다. (성능상의 이유로 오직 개발모드에서만 가능하다) 각 props 속성에 대해 React 는 (1) prop 이 예상되는지 (2) prop 이 올바른 유형인지 확인하기 위해 컴포넌트의 propType 객체에서 이를 찾으려고 시도한다.
 
+## 데이터 흐름
+
+* Parent Component나 Child Component 둘다 특정 Component가 있는(stateful) 또는 상태가 없는지(stateless) 여부를 알 수 없으며 함수형 또는 클래스로 정의되었는지 여부도 신경 쓰지 않는다.
+* 이것이 상태가 local 또는 캡슐화되었다고 부르는 이유다.
+* 상태를 소유하고 설정하고 있는 컴포넌트 이외의 컴포넌트에서는 이 상태를 액세스 할 수 없다.
+* 따라서 상태값은 하위 컴포넌트에 `props`로 전달되어 진다.(parent->child)
+* 이를 "하향식" 또는 "단방향" 데이터 흐름이라고 한다.
+* **모든 상태는 항상 특정 컴포넌트가 소유하며 해당 상태에서 파생 된 모든 데이터 또는 UI는 트리의 구성 요소 "아래쪽 방향"에만 영향을 미친다.**
+
 ## 객체 비구조화 할당(Object Destructuring)
 
 ```js
@@ -139,3 +146,17 @@ console.log(this.state); // {carstats: Array(0), config: {…}}
 console.log(this.state.config); //  {speed: 55, temperature: 20, climate: true, wheels: 19}
 console.log(config); // {speed: 55, temperature: 20, climate: true, wheels: 19}
 ```
+
+> 개념적으로, React 컴포넌트는 JavaScript function과 같아 ‘props’라 불리우는 임의의 입력을 받아 무엇이 보여져야 하는지를 묘사하는 React 엘리먼트를 리턴한다.
+
+이러한 개념은 한마디로
+
+> fn(d) = V
+
+* 데이터를 입력으로 받고 `view`를 리턴하는 함수
+
+## 순수 함수(Pure function)
+
+> 어떠한 함수들은 입력값을 변경하지 않고 언제 같은 입력값이면 같은 출력값을 리턴한다는 의미에서 순수하다고 불리운다. (Pure function)
+
+* 여기서 한 가지 중요한 React의 엄격한 룰은 모든 React 컴포넌트들은 `props`에 관해서는 순수 함수와 같이 동작해야 한다는 것이다. `props`는 read-only여야 한다.
