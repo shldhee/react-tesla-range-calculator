@@ -1,5 +1,5 @@
 import React from 'react';
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 import './TeslaStats.css';
 
 const TeslaStats = props => {
@@ -19,7 +19,7 @@ const TeslaStats = props => {
 };
 
 TeslaStats.propTypes = {
-  carstats: Proptypes.array,
+  carstats: PropTypes.array,
 };
 
 export default TeslaStats;

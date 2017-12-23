@@ -215,3 +215,52 @@ class TeslaBattery extends Component {
     this.statusUpdate();
   }
 ```
+
+##
+
+* this.state.config 를 config 로 축약
+
+```js
+const config = { ...this.state.config };
+console.log(config);
+console.log({ ...this.state.config });
+```
+
+## Reusable Component
+
+* 테슬라의 속도 및 외부 온도 컨트롤은 재사용 가능한 컴포넌트이어야 하므로 단계, 최소값, 최대값 및 제목 및 단위와 같은 기타 메터 데이터를 허용하는 일반 Counter 컴포넌트를 만든다.
+* 지금까지 만들어본 컴포넌트와 달리 사용자 입력(버튼 클릭, 체크 박스 등)에 반응하여 상태값을 변경하는 액션이 필요하다.
+* 어떻게 하위 컴포넌트에서 발생하는 이벤트를 핸들링하는지 알아보도록 하자.
+* 사용자가 속도와 온도를 클릭하여 변경(최대값과 최소값 사이)할 때마다 수치가 변경되어 렌더링 되록 상태를 업데이트
+* `callback(increment, decrement)`을 `TeslaCounter`에 전달한다. 버튼에 `onClick`이벤트를 사용하여 이벤트를 알릴 수 있다.
+
+```js
+  <button
+    onClick={e => props.increment(e, props.initValues.title)}
+    disabled={props.currentValue >= props.initValues.max}
+  />
+  <button
+    onClick={e => props.decrement(e, props.initValues.title)}
+    disabled={props.currentValue <= props.initValues.min}
+  />
+```
+
+* `TeslaBattery`에 의해 전달된 `callback`은 `setState()`를 호출하고 앱이 업데이트 된다.
+* _사용자 클릭 -> TeslaBattery(callback 함수 전달) -> TeslaCounter(callback 함수 처리)_
+
+## Default Value Props
+
+* `TeslaCounter`에 전달되는 `initValues`는 상수값으로 `TeslaBattery`의 상위 컴포넌트인 `App`으로 부터 전달된다.
+* `App`->`TeslaBattery(this.props.counterDefaultVal)`->`TeslaCounter(this.props.initValues)`
+
+## Virtual DOM
+
+* Single-Page-Application (SPA)는 우리에게 줄 수 있는 것은 매끄러운 사용자 경험과 상호 작용일 것이다.
+* 사용자가 속도 및 온도를 변경시에 전체 페이지를 로드하지 않고 바뀐 부분만 업데이트 된다.
+* 데이터를 가져오기 위해 서버에 접속할 필요가 있다 하더라도!!
+* React 에서는 Virtual DOM 을 사용한다.
+* 컴포넌트의 렌더링 메서드가 처음 호출되면 실제 DOM 요소 자체가 아닌 가상 DOM 이라는 DOM 모델을 출력
+* 가상 DOM(Virtual DOM)은 DOM 의 모습을 나타내는 자바스크립트 데이터 구조이다.
+* 그런 다음 React 는 이 모델을 가져와서 실제 DOM 요소를 생성한다.
+* 그 다음 컴포넌트 상태가 변경될때마다 (`setState` 호출) 컴포넌트 렌더링 메소드가 호출되고 새 가상 DOM 이 만들어지고, 새 가상 DOM 과 이전 가상 DOM 비교한다.
+* 비교 후 실제 DOM 변경사항을 나타낸다.
