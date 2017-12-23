@@ -121,12 +121,12 @@ import TeslaNotice from '../components/TeslaNotice/TeslaNotice';
 
 ## 데이터 흐름
 
-* Parent Component나 Child Component 둘다 특정 Component가 있는(stateful) 또는 상태가 없는지(stateless) 여부를 알 수 없으며 함수형 또는 클래스로 정의되었는지 여부도 신경 쓰지 않는다.
+* Parent Component 나 Child Component 둘다 특정 Component 가 있는(stateful) 또는 상태가 없는지(stateless) 여부를 알 수 없으며 함수형 또는 클래스로 정의되었는지 여부도 신경 쓰지 않는다.
 * 이것이 상태가 local 또는 캡슐화되었다고 부르는 이유다.
 * 상태를 소유하고 설정하고 있는 컴포넌트 이외의 컴포넌트에서는 이 상태를 액세스 할 수 없다.
 * 따라서 상태값은 하위 컴포넌트에 `props`로 전달되어 진다.(parent->child)
 * 이를 "하향식" 또는 "단방향" 데이터 흐름이라고 한다.
-* **모든 상태는 항상 특정 컴포넌트가 소유하며 해당 상태에서 파생 된 모든 데이터 또는 UI는 트리의 구성 요소 "아래쪽 방향"에만 영향을 미친다.**
+* **모든 상태는 항상 특정 컴포넌트가 소유하며 해당 상태에서 파생 된 모든 데이터 또는 UI 는 트리의 구성 요소 "아래쪽 방향"에만 영향을 미친다.**
 
 ## 객체 비구조화 할당(Object Destructuring)
 
@@ -147,7 +147,7 @@ console.log(this.state.config); //  {speed: 55, temperature: 20, climate: true, 
 console.log(config); // {speed: 55, temperature: 20, climate: true, wheels: 19}
 ```
 
-> 개념적으로, React 컴포넌트는 JavaScript function과 같아 ‘props’라 불리우는 임의의 입력을 받아 무엇이 보여져야 하는지를 묘사하는 React 엘리먼트를 리턴한다.
+> 개념적으로, React 컴포넌트는 JavaScript function 과 같아 ‘props’라 불리우는 임의의 입력을 받아 무엇이 보여져야 하는지를 묘사하는 React 엘리먼트를 리턴한다.
 
 이러한 개념은 한마디로
 
@@ -159,4 +159,59 @@ console.log(config); // {speed: 55, temperature: 20, climate: true, wheels: 19}
 
 > 어떠한 함수들은 입력값을 변경하지 않고 언제 같은 입력값이면 같은 출력값을 리턴한다는 의미에서 순수하다고 불리운다. (Pure function)
 
-* 여기서 한 가지 중요한 React의 엄격한 룰은 모든 React 컴포넌트들은 `props`에 관해서는 순수 함수와 같이 동작해야 한다는 것이다. `props`는 read-only여야 한다.
+* 여기서 한 가지 중요한 React 의 엄격한 룰은 모든 React 컴포넌트들은 `props`에 관해서는 순수 함수와 같이 동작해야 한다는 것이다. `props`는 read-only 여야 한다.
+
+## setState
+
+* `import { getModelData } from '../services/BatteryService';` : BatteryService.js 에서 getModelData()를 가져온다.(import)
+* `componentDidMount()` 컴포넌트가 첫 렌더링을 마친 후 실행되는 메소드
+  * 참고 : [velopert](https://velopert.com/1130)
+* `statsUpdate()` : `carModels` 배열 정의 및 `this.setState`를 사용해 `state` 업데이트
+
+```js
+import { getModelData } from '../services/BatteryService';
+
+class TeslaBattery extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      carstats: [],
+      config: {
+        speed: 55,
+        temperature: 20,
+        climate: true,
+        wheels: 19,
+      },
+    };
+
+    this.calculateStats = this.calculateStats.bind(this); // Class내에서 this로 접근하기 위해서는 함수내 명시적인 방인딩이 필요하다.
+    this.statusUpdate = this.statusUpdate.bind(this);
+  }
+
+  calculateStats = (models, value) => {
+    const dataModels = getModelData(); // carModels로 구분된 데이터 자료들
+    return models.map(model => {
+      const { speed, temperature, climate, wheels } = value; // ES6 Object destructuring
+      const miles =
+        dataModels[model][wheels][climate ? 'on' : 'off'].speed[speed][
+          temperature // dataModels 접근
+        ];
+      return {
+        model,
+        miles,
+      };
+    });
+  };
+
+  statusUpdate() {
+    const carModels = ['60', '60D', '75', '75D', '90D', 'P100D'];
+    this.setState({
+      carstats: this.calculateStats(carModels, this.state.config),
+    });
+  }
+
+  componentDidMount() {
+    this.statusUpdate();
+  }
+```
