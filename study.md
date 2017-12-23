@@ -264,3 +264,30 @@ console.log({ ...this.state.config });
 * 그런 다음 React 는 이 모델을 가져와서 실제 DOM 요소를 생성한다.
 * 그 다음 컴포넌트 상태가 변경될때마다 (`setState` 호출) 컴포넌트 렌더링 메소드가 호출되고 새 가상 DOM 이 만들어지고, 새 가상 DOM 과 이전 가상 DOM 비교한다.
 * 비교 후 실제 DOM 변경사항을 나타낸다.
+
+## TeslaClimate
+
+* `props.value`, `props.limit`을 `boolean`값으로 전달하여 삼항연산자 사용하여 바꾼다.
+* `handleChangeClimate()` 콜백함수를 통해 값을 변경
+
+```js
+handleChangeClimate() {
+  const config = { ...this.state.config };
+  config['climate'] = !this.state.config.climate;
+  this.setState({ config });
+}
+```
+
+## binding
+
+```js
+constructor(props) {
+  super(props);
+  ...
+  this.handleChangeClimate = this.handleChangeClimate.bind(this); // 1. this바인딩 안하면
+  // 2. 렌더 메소드에서 this가 window나 undefined를 가리킨다.
+  ...
+}
+```
+
+* 참고 : [Zerocho](https://www.zerocho.com/category/React/post/578232e7a479306028f43393
